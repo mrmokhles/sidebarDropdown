@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Dropdown Menu with Submenu</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	<style>
+body {
+
+	background-image:linear-gradient(to  right, white,green);
+	
+    font-family: Arial, sans-serif;
+	font-size:16px;
+    }
+	
+.dropdown{
+	display:flex;
+	justify-content:center;
+	margin-top:100px;
+	
+	}
+
+
+.dropdown-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+	width:200px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    
+	margin-top:40px;
+    display: none;
+    position: absolute;
+    background-image:linear-gradient(to  bottom, lightblue, orange);
+    width: 200px;
+    box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+	background-color:none;
+	width:180px;
+    padding: 12px 10px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+.submenu-btn {
+    color: black;
+	background:none;
+	width:200px;
+	border:none;
+	outline:none;
+    padding: 12px 10px;
+    text-decoration: none;
+	
+	text-align:left;
+	font-size:16px;
+    display: block;
+    cursor: pointer;
+}
+
+.dropdown-content a:hover, .submenu-btn:hover {
+     background-image:linear-gradient(to  bottom, lightgreen, lightblue);
+}
+
+.dropdown-content .submenu {
+    position: relative;
+}
+
+.submenu-content {
+    display: none;
+    position: absolute;
+    left: 100%;
+	margin-left:8px;
+	border-radius:8px;
+    top: 13px;
+    background-image:linear-gradient(to  right, red, lightblue);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+
+.submenu-content:before{
+	content:"";
+	position:absolute;
+	top:2px;
+	left:-10px;
+	transform:translateX(-50%);
+	border:13px solid;
+	border-color:transparent red transparent transparent;
+	
+	}
+	
+<!-- .dropdown-content:after{ -->
+	<!-- <!-- content: "\2193"; --> -->
+	<!-- content:" "; -->
+	<!-- position:absolute; -->
+	<!-- top:18px; -->
+	<!-- left:188px; -->
+	<!-- transform:translate(-50%); -->
+	<!-- border:6px solid; -->
+	<!-- border-color:black transparent transparent transparent; -->
+	
+	<!-- } -->
+
+
+.caret{
+	width:0;
+	height:0;
+	display:block;
+   
+	<!-- position:absolute; -->
+	float:right;
+	margin-top:-8px;
+	margin-left:160px;
+	
+	border:6px solid;
+	border-color:black transparent transparent transparent;
+	transition:0.3s;
+}
+.caret-rotate{
+
+   transform:rotate(180deg);
+    transition: transform 0.3s ease; /* Smooth transition for rotation */
+}
+.active{
+transform:rotate(180deg);
+}
+
+
+<!-- .dropdown-btn{margin-bottom:10px;} -->
+	
+	</style>
+</head>
+<body>
+
+    <div class="dropdown">
+        <button class="dropdown-btn">Dropdown<span class="caret"></span></button>
+        <div class="dropdown-content">
+            <!-- <a href="#">Item 1</a> -->
+            <!-- <a href="#">Item 2</a> -->
+            <div class="submenu" >
+                <button class="submenu-btn" id="submenu1" value="submenu1">Team<span class="caret" id="caret1"></span></button>
+                <div class="submenu-content">
+                    <a href="#">One Day</a>
+                    <a href="#">Test</a>
+                    <a href="#">T20</a>
+                </div>
+            </div>
+			
+			<div class="submenu">
+                <button class="submenu-btn" id="submenu2" value="submenu2">Ranking<span class="caret" id="caret2" ></span></button>
+                <div class="submenu-content">
+                    <a href="#">T20</a>
+                    <a href="#">Test</a>
+                    <a href="#">T20</a>
+                </div>
+            </div>
+			<div class="submenu">
+                <button class="submenu-btn" id="submenu3" value="submenu3">Item 3<span class="caret" id="caret3"></span></button>
+                <div class="submenu-content">
+                    <a href="#">Subitem 3.1</a>
+                    <a href="#">Subitem 3.2</a>
+                    <a href="#">Subitem 3.3</a>
+                </div>
+            </div>
+            <!-- <a href="#">Item 4</a> -->
+        </div>
+    </div>
+  
+</body>
+</html>
+<script>
+var suml=[];
+var xp;
+$(document).ready(function() {
+    const caret=document.querySelector('.caret');
+    
+	
+    $('.dropdown-btn').on('click', function(event) {
+        event.stopPropagation();
+		
+		caret.classList.toggle('caret-rotate');
+        $('.dropdown-content').toggle();
+    });
+	
+	var wo=["#submenu1","#submenu2","#submenu3"];
+	var w1=["#caret1","#caret2","#caret3"];
+	var w2=["#submenu1","#submenu2","#submenu3"];
+	
+	<!-- You'll need to create a temporary scope to preserve i's value -->
+	for(var i=1;i<wo.length+1;i++)(function(i){
+	   $('#submenu'+i+'').on('click', function(event) {
+		  event.stopPropagation();
+		  fun1($('#submenu'+i+'').val(),wo);
+		
+		  fun2(i-1,w1);
+		 
+		}); 
+		
+	})(i); 
+	
+	
+	function fun1(name,menu){
+	 
+	 <!-- var menu=["#submenu1","#submenu2","#submenu3"]; -->
+	 
+	 for(var i=0;i<menu.length;i++){
+	 
+	  if(menu[i].includes(name)){
+	     $(menu[i]).next('.submenu-content').toggle();
+		
+	  }
+	  
+	  else{
+	    
+		$(menu[i]).next('.submenu-content').hide(); 
+	  }
+	  
+	 }
+	
+	}
+	
+	
+  function fun2(name,menu){
+	 
+	 <!-- var menu=["#caret1","#caret2","#caret3"]; -->
+	 
+	 for(var i=0;i<menu.length;i++){
+	 
+	     if(i==name){
+		  
+			console.log("ok");
+			$(menu[i]).toggleClass('active');
+		 }
+		 else{
+		    $(menu[i]).removeClass('active');
+		 }
+		
+	 }
+	
+	}
+	 
+});
+
+</script>
+
